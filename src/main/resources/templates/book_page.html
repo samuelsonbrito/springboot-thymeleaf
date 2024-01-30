@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <div class="topnav">
-        <a class="active" href="/">Home</a>
-        <a href="/books">Books</a>
-    </div>
+    <div th:insert="~{parts/navigation::navigation}"></div>
     <h1>Welcome to the book page <span th:text="${userLogin}"></span></h1>
 </body>
 </html>
