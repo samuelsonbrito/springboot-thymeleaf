@@ -9,5 +9,20 @@
 <body>
     <div th:insert="~{parts/navigation::navigation}"></div>
     <h1>Welcome to the book page <span th:text="${userLogin}"></span></h1>
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Year</th>
+            <th></th>
+        </tr>
+        <th:block th:each="book : ${userBooks}">
+            <tr>
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.year}"></td>
+            </tr>
+        </th:block>
+    
+    </table>
+    <div th:insert="~{parts/footer :: footer}"></div>
 </body>
 </html>
