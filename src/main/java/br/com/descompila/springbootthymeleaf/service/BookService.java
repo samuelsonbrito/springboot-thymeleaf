@@ -27,4 +27,26 @@ public class BookService {
         return books.stream().filter(book -> book.getYear() > 2015).toList();
     }
 
+    public void save(Book book) {
+        books.add(book);
+    }
+
+    public Book findByTitleAndDelete(String title) {
+        Book bookModel = books.stream()
+                .filter(it -> it.getTitle().equals(title))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+        books.remove(bookModel);
+        return bookModel;
+    }
+
+    public void edit(Book book) {
+        save(book);
+    }
+
+    public void delete(String title) {
+        findByTitleAndDelete(title);
+    }
+    
+
 }

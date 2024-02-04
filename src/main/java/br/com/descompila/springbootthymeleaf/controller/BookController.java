@@ -6,6 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.descompila.springbootthymeleaf.model.Book;
@@ -14,7 +18,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 
+
 @Controller
+@RequestMapping("/books")
 public class BookController {
     
     private static final String USER_LOGIN = "userLogin";
@@ -22,7 +28,7 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("books")//o name é usado somente quando o valor da solicitacao for diferente da variavel
+    @GetMapping
     public String getBookPage(@RequestParam(required = false, name = "login") String login, 
                               @RequestParam(required = false) String email, 
                               Model model,
@@ -42,6 +48,37 @@ public class BookController {
         model.addAttribute("userBooks", books);
 
         return "book_page";
+    }
+
+    @GetMapping("/create")
+    public String getCreateBookPage(Model model) {
+        model.addAttribute("newBook", new Book());
+        return "create_book_page";
+    }
+
+    @PostMapping("/createBook")
+    public String createBook(@ModelAttribute Book book) {
+        bookService.save(book);
+        return "redirect:/books";
+    }
+
+    @GetMapping("/edit/{title}")
+    public String getEditBookPage(Model model, @PathVariable String title) {
+        Book byTitle = bookService.findByTitleAndDelete(title);
+        model.addAttribute("bookToEdit", byTitle);
+        return "edit_book_page";
+    }
+
+    @PostMapping("/editBook")
+    public String editBook(@ModelAttribute Book book) {
+        bookService.edit(book);
+        return "redirect:/books";
+    }
+    
+    @GetMapping("/delete/{title}")
+    public String delete(@PathVariable String title) {
+        bookService.delete(title);
+        return "redirect:/books";
     }
     
 }
